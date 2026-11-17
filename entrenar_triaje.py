@@ -83,23 +83,47 @@ print(
     )
 )
 
-#Generar y guardar Matriz de Confusión (Evidencia)
+#Generar y guardar Gráfico de Barras de la Matriz de Confusión (Evidencia)
 cm = confusion_matrix(y_test, y_pred_test)
-plt.figure(figsize=(6, 4))
-sns.heatmap(
+
+#Convirtiendo matriz de confusión a un DataFrame para graficar barras limpias
+df_cm = pd.DataFrame(
     cm,
-    annot=True,
-    fmt="d",
-    cmap="Blues",
-    xticklabels=['Crítico (1)', 'Moderado (2)', 'Leve (3)'],
-    yticklabels=['Crítico (1)', 'Moderado (2)', 'Leve (3)'],
+    index=['Real: Crítico (1)', 'Real: Moderado (2)', 'Real: Leve (3)'],
+    columns=[
+        'Pred: Crítico (1)',
+        'Pred: Moderado (2)',
+        'Pred: Leve (3)',
+    ],
+).reset_index()
+
+df_cm_melted = df_cm.melt(
+    id_vars='index', var_name='Prediccion', value_name='Cantidad'
 )
-plt.title("Matriz de Confusión - Triaje Médico (Random Forest)")
-plt.xlabel("Predicción del Modelo")
-plt.ylabel("Valor Real")
+
+df_cm_melted.rename(columns={'index': 'Valor_Real'}, inplace=True)
+
+plt.figure(figsize=(8, 5))
+sns.barplot(
+    data=df_cm_melted,
+    x='Valor_Real',
+    y='Cantidad',
+    hue='Prediccion',
+    palette='Blues',
+)
+
+plt.title(
+    'Evaluación por Clases - Matriz de Confusión (Modelo Random Forest)',
+    fontsize=11,
+    weight='bold',
+)
+
+plt.xlabel('Categoría Real del Paciente', fontsize=10)
+plt.ylabel('Cantidad de Pacientes', fontsize=10)
+plt.legend(title='Resultado del Modelo', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
-plt.savefig("matriz_confusion.png", dpi=300)
-print("Gráfico guardado como 'matriz_confusion.png'")
+plt.savefig('matriz_confusion.png', dpi=300)
+print("Gráfico de barras guardado como 'matriz_confusion.png'")
 
 #Serialización del modelo
 joblib.dump(modelo_rf, 'modelo_triaje.pkl')
@@ -115,10 +139,12 @@ paciente_nuevo = pd.DataFrame([{
     'Dolor_pecho': 1,
     'Dificultad_respiratoria': 1,
 }])
+
 prediccion = modelo_rf.predict(paciente_nuevo)[0]
 niveles = {
     1: 'Prioridad 1 - Crítico (Atención Inmediata)',
     2: 'Prioridad 2 - Moderado',
     3: 'Prioridad 3 - Leve',
 }
+
 print(f'\nPrueba con paciente nuevo -> Resultado: {niveles[prediccion]}')
