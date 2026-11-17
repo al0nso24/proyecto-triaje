@@ -102,7 +102,7 @@ plt.savefig("matriz_confusion.png", dpi=300)
 print("Gráfico guardado como 'matriz_confusion.png'")
 
 #Serialización del modelo
-joblib.dump(modelo_rf, 'modelo_rf.pkl')
+joblib.dump(modelo_rf, 'modelo_triaje.pkl')
 print("Modelo serializado guardado como 'modelo_triaje.pkl'")
 
 #Prueba de inferencia rápida en consola
