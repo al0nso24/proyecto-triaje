@@ -1,23 +1,3 @@
-# # 1: Crítico (Rojo), 2: Moderado (Amarillo), 3: Leve (Verde)
-# prioridad_triaje = np.where(
-#     score_riesgo >= 5.5, 1, np.where(score_riesgo >= 2.5, 2, 3)
-# )
-
-# df = pd.DataFrame({
-#     'edad': edad,
-#     'frecuencia_cardiaca': frecuencia_cardiaca,
-#     'presion_sistolica': presion_sistolica,
-#     'saturacion_oxigeno': saturacion_oxigeno,
-#     'temperatura': temperatura,
-#     'dolor_pecho': dolor_pecho,
-#     'dificultad_respiratoria': dificultad_respiratoria,
-#     'prioridad_triaje': prioridad_triaje,
-# })
-
-# df.to_csv('dataset_triaje.csv', index=False)
-# print('Dataset generado con éxito:', df.shape)
-# print(df['prioridad_triaje'].value_counts())
-
 import numpy as np
 import pandas as pd
 
@@ -54,28 +34,18 @@ prioridad_triaje = np.where(
     score >= 5.5, 1, np.where(score >= 2.5, 2, 3)
 )
 
+#Cuadro
+df = pd.DataFrame({
+    "Edad": edad,
+    "Frecuencia_cardiaca": frecuencia_cardiaca,
+    "Presion_sistolica": presion_sistolica,
+    "Saturacion_oxigeno": saturacion_oxigeno,
+    "Temperatura": temperatura,
+    "Dolor_pecho": dolor_pecho,
+    "Dificultad_respiratoria": dificultad_respiratoria,
+    "Prioridad_triaje": prioridad_triaje
+})
 
-
-
-
-
-
-# # 1: Crítico (Rojo), 2: Moderado (Amarillo), 3: Leve (Verde)
-# prioridad_triaje = np.where(
-#     score_riesgo >= 5.5, 1, np.where(score_riesgo >= 2.5, 2, 3)
-# )
-
-# df = pd.DataFrame({
-#     'edad': edad,
-#     'frecuencia_cardiaca': frecuencia_cardiaca,
-#     'presion_sistolica': presion_sistolica,
-#     'saturacion_oxigeno': saturacion_oxigeno,
-#     'temperatura': temperatura,
-#     'dolor_pecho': dolor_pecho,
-#     'dificultad_respiratoria': dificultad_respiratoria,
-#     'prioridad_triaje': prioridad_triaje,
-# })
-
-# df.to_csv('dataset_triaje.csv', index=False)
-# print('Dataset generado con éxito:', df.shape)
-# print(df['prioridad_triaje'].value_counts())
+df.to_csv('dataset_triaje.csv', index=False)
+print('Dataset generado con éxito:', df.shape)
+print(df['prioridad_triaje'].value_counts())
