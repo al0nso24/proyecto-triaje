@@ -4,7 +4,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score, precision_score, recall_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
@@ -47,13 +47,14 @@ def evaluar_modelo(nombre, modelo, X_v, y_v, X_t, y_t):
        f' {accuracy_score(y_t, pred_t):.4f}'
     )
     print(
-        "Precision -> Val:" f"{precision_score(y_v, pred_v):.4f}" | 
-        "Test:" f"{accuracy_score(y_t, pred_t):.4f}"
+        'Precision -> Val:'
+        f" {precision_score(y_v, pred_v, average='weighted'):.4f} | Test:"
+        f" {precision_score(y_t, pred_t, average='weighted'):.4f}"
     )
     print(
-        "Recall -> Val:"
-        f"{recall_score(y_v, pred_v, average="weighted"):.4f} | Test:"
-        f"{recall_score(y_t, pred_t, average="weighted"):.4f}"
+        'Recall    -> Val:'
+        f" {recall_score(y_v, pred_v, average='weighted'):.4f} | Test:"
+        f" {recall_score(y_t, pred_t, average='weighted'):.4f}"
     )
     print(
         'F1-Score  -> Val:'
@@ -89,7 +90,7 @@ sns.heatmap(
     cm,
     annot=True,
     fmt="d",
-    cmap="Blues"
+    cmap="Blues",
     xticklabels=['Crítico (1)', 'Moderado (2)', 'Leve (3)'],
     yticklabels=['Crítico (1)', 'Moderado (2)', 'Leve (3)'],
 )
