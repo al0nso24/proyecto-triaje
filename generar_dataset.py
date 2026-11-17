@@ -48,4 +48,4 @@ df = pd.DataFrame({
 
 df.to_csv('dataset_triaje.csv', index=False)
 print('Dataset generado con éxito:', df.shape)
-print(df['prioridad_triaje'].value_counts())
+print(df['Prioridad_triaje'].value_counts())
