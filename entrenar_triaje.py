@@ -99,3 +99,25 @@ plt.ylabel("Valor Real")
 plt.tight_layout()
 plt.savefig("matriz_confusion.png", dpi=300)
 print("Gráfico guardado como 'matriz_confusion.png'")
+
+#Serialización del modelo
+joblib.dump(modelo_rf, 'modelo_rf.pkl')
+print("Modelo serializado guardado como 'modelo_triaje.pkl'")
+
+#Prueba de inferencia rápida en consola
+paciente_nuevo = pd.DataFrame([{
+    'Edad': 68,
+    'Frecuencia_cardiaca': 125,
+    'Presion_sistolica': 170,
+    'Saturacion_oxigeno': 88.5,
+    'Temperatura': 38.2,
+    'Dolor_pecho': 1,
+    'Dificultad_respiratoria': 1,
+}])
+prediccion = modelo_rf.predict(paciente_nuevo)[0]
+niveles = {
+    1: 'Prioridad 1 - Crítico (Atención Inmediata)',
+    2: 'Prioridad 2 - Moderado',
+    3: 'Prioridad 3 - Leve',
+}
+print(f'\nPrueba con paciente nuevo -> Resultado: {niveles[prediccion]}')
