@@ -21,11 +21,18 @@ X_val, X_test, y_val, y_test = train_test_split(
     X_temp, y_temp, test_size=0.50, random_state=42, stratify=y_temp
 )
 
+#Escalamiento
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_val_scaled = scaler.transform(X_val)
+X_test_scaled = scaler.transform(X_test)
 
+#Modelo Baseline: Regresión Logística
+baseline = LogisticRegression(max_iter=1000, random_state=42)
+baseline.fit(X_train_scaled, y_train)
 
-
-
-
-
-
-
+#Modelo principal
+modelo_rf = RandomForestClassifier(
+    n_estimators=150, max_depth=10, random_state=42
+)
+modelo_rf.fit(X_train, y_train)
