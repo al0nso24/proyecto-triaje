@@ -36,3 +36,66 @@ modelo_rf = RandomForestClassifier(
     n_estimators=150, max_depth=10, random_state=42
 )
 modelo_rf.fit(X_train, y_train)
+
+#Función para imprimir métricad de Validación y Prueba
+def evaluar_modelo(nombre, modelo, X_v, y_v, X_t, y_t):
+    pred_v = modelo.predict(X_v)
+    pred_t = modelo.predict(X_t)
+    print(f'\n=== {nombre} ===')
+    print(
+       f'Accuracy  -> Val: {accuracy_score(y_v, pred_v):.4f} | Test:'
+       f' {accuracy_score(y_t, pred_t):.4f}'
+    )
+    print(
+        "Precision -> Val:" f"{precision_score(y_v, pred_v):.4f}" | 
+        "Test:" f"{accuracy_score(y_t, pred_t):.4f}"
+    )
+    print(
+        "Recall -> Val:"
+        f"{recall_score(y_v, pred_v, average="weighted"):.4f} | Test:"
+        f"{recall_score(y_t, pred_t, average="weighted"):.4f}"
+    )
+    print(
+        'F1-Score  -> Val:'
+        f" {f1_score(y_v, pred_v, average='weighted'):.4f} | Test:"
+        f" {f1_score(y_t, pred_t, average='weighted'):.4f}"
+    )
+    return pred_t
+
+evaluar_modelo(
+    "Baseline (Regresión Logística)",
+    baseline,
+    X_val_scaled,
+    y_val,
+    X_test_scaled,
+    y_test
+)
+
+y_pred_test = evaluar_modelo(
+    "Modelo Principal (Random Forest)", modelo_rf, X_val, y_val, X_test, y_test
+)
+
+print("\nReporte detallado por clase (Random Forest - Test):")
+print(
+    classification_report(
+        y_test, y_pred_test, target_names=['1-Crítico', '2-Moderado', '3-Leve']
+    )
+)
+
+#Generar y guardar Matriz de Confusión (Evidencia)
+cm = confusion_matrix(y_test, y_pred_test)
+plt.figure(figsize=(6, 4))
+sns.heatmap(
+    cm,
+    annot=True,
+    fmt="d",
+    cmap="Blues"
+    xticklabels=['Crítico (1)', 'Moderado (2)', 'Leve (3)'],
+    yticklabels=['Crítico (1)', 'Moderado (2)', 'Leve (3)'],
+)
+plt.title("Matriz de Confusión - Triaje Médico (Random Forest)")
+plt.xlabel("Predicción del Modelo")
+plt.ylabel("Valor Real")
+plt.tight_layout()
+plt.savefig("matriz_confusion.png", dpi=300)
+print("Gráfico guardado como 'matriz_confusion.png'")
