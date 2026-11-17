@@ -1,17 +1,3 @@
-# #Cálculo de riesgo clínico para asignar prioridad de triaje
-# score_riesgo = (
-#     (saturacion_oxigeno < 90) * 4
-#     + (dolor_pecho == 1) * 3
-#     + (dificultad_respiratoria == 1) * 3
-#     + (frecuencia_cardiaca > 120) * 2
-#     + (presion_sistolica > 165) * 2
-#     + (presion_sistolica < 90) * 3
-#     + (temperatura > 39.0) * 1.5
-#     + (edad > 65) * 1
-#     #Ruido clínico realista
-#     + np.random.normal(0, 1.1, size=n)
-# )
-
 # # 1: Crítico (Rojo), 2: Moderado (Amarillo), 3: Leve (Verde)
 # prioridad_triaje = np.where(
 #     score_riesgo >= 5.5, 1, np.where(score_riesgo >= 2.5, 2, 3)
@@ -46,3 +32,17 @@ saturacion_oxigeno = np.random.normal(96, 3.5, size=n).clip(78, 100).round(1)
 temperatura = np.random.normal(37.1, 0.9, size=n).clip(35.0, 41.2).round(1)
 dolor_pecho = np.random.choice([0, 1], size=n, p=[0.82, 0.18])
 dificultad_respiratoria = np.random.choice([0, 1], size=n, p=[0.80, 0.20])
+
+#Cálculo de riesgo clínico para asignar la prioridad de triaje
+score = (
+    (saturacion_oxigeno < 90) * 4
+    + (dolor_pecho == 1) * 3
+    + (dificultad_respiratoria == 1) * 3
+    + (frecuencia_cardiaca > 120) * 2
+    + (presion_sistolica > 165) * 2
+    + (presion_sistolica < 90) * 3
+    + (temperatura > 39.0) * 1.5
+    + (edad > 65) * 1
+    #Ruido clínico realista
+    + np.random.normal(0, 1.1, size=n)
+)
