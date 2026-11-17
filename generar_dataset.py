@@ -46,3 +46,36 @@ score = (
     #Ruido clínico realista
     + np.random.normal(0, 1.1, size=n)
 )
+
+#Crítico (rojo)
+#Moderado (amarillo)
+#Leve (verde)
+prioridad_triaje = np.where(
+    score >= 5.5, 1, np.where(score >= 2.5, 2, 3)
+)
+
+
+
+
+
+
+
+# # 1: Crítico (Rojo), 2: Moderado (Amarillo), 3: Leve (Verde)
+# prioridad_triaje = np.where(
+#     score_riesgo >= 5.5, 1, np.where(score_riesgo >= 2.5, 2, 3)
+# )
+
+# df = pd.DataFrame({
+#     'edad': edad,
+#     'frecuencia_cardiaca': frecuencia_cardiaca,
+#     'presion_sistolica': presion_sistolica,
+#     'saturacion_oxigeno': saturacion_oxigeno,
+#     'temperatura': temperatura,
+#     'dolor_pecho': dolor_pecho,
+#     'dificultad_respiratoria': dificultad_respiratoria,
+#     'prioridad_triaje': prioridad_triaje,
+# })
+
+# df.to_csv('dataset_triaje.csv', index=False)
+# print('Dataset generado con éxito:', df.shape)
+# print(df['prioridad_triaje'].value_counts())
