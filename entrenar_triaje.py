@@ -2,7 +2,7 @@ import joblib
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score, precision_score, recall_score
 from sklearn.model_selection import train_test_split
@@ -31,13 +31,11 @@ X_test_scaled = scaler.transform(X_test)
 baseline = LogisticRegression(max_iter=1000, random_state=42)
 baseline.fit(X_train_scaled, y_train)
 
-#Modelo principal
-modelo_rf = RandomForestClassifier(
-    n_estimators=150, max_depth=10, random_state=42
-)
-modelo_rf.fit(X_train, y_train)
+#Modelo principal (SVM entrenado con datos escalados)
+modelo_svm = SVC(probability=True, random_state=42)
+modelo_svm.fit(X_train_scaled, y_train)
 
-#Función para imprimir métricad de Validación y Prueba
+#Función para imprimir métricas de Validación y Prueba
 def evaluar_modelo(nombre, modelo, X_v, y_v, X_t, y_t):
     pred_v = modelo.predict(X_v)
     pred_t = modelo.predict(X_t)
@@ -72,11 +70,12 @@ evaluar_modelo(
     y_test
 )
 
+# CORRECCIÓN 1: Usamos X_val_scaled y X_test_scaled para el SVM
 y_pred_test = evaluar_modelo(
-    "Modelo Principal (Random Forest)", modelo_rf, X_val, y_val, X_test, y_test
+    "Modelo Principal (SVM)", modelo_svm, X_val_scaled, y_val, X_test_scaled, y_test
 )
 
-print("\nReporte detallado por clase (Random Forest - Test):")
+print("\nReporte detallado por clase (SVM - Test):")
 print(
     classification_report(
         y_test, y_pred_test, target_names=['1-Crítico', '2-Moderado', '3-Leve']
@@ -113,7 +112,7 @@ sns.barplot(
 )
 
 plt.title(
-    'Evaluación por Clases - Matriz de Confusión (Modelo Random Forest)',
+    'Evaluación por Clases - Matriz de Confusión (Modelo SVM)',
     fontsize=11,
     weight='bold',
 )
@@ -126,7 +125,7 @@ plt.savefig('matriz_confusion.png', dpi=300)
 print("Gráfico de barras guardado como 'matriz_confusion.png'")
 
 #Serialización del modelo
-joblib.dump(modelo_rf, 'modelo_triaje.pkl')
+joblib.dump(modelo_svm, 'modelo_triaje.pkl')
 print("Modelo serializado guardado como 'modelo_triaje.pkl'")
 
 #Prueba de inferencia rápida en consola
@@ -140,7 +139,10 @@ paciente_nuevo = pd.DataFrame([{
     'Dificultad_respiratoria': 1,
 }])
 
-prediccion = modelo_rf.predict(paciente_nuevo)[0]
+#Escalando también los datos del paciente nuevo antes de predecir con SVM
+paciente_nuevo_scaled = scaler.transform(paciente_nuevo)
+prediccion = modelo_svm.predict(paciente_nuevo_scaled)[0]
+
 niveles = {
     1: 'Prioridad 1 - Crítico (Atención Inmediata)',
     2: 'Prioridad 2 - Moderado',
