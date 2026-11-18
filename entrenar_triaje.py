@@ -102,7 +102,7 @@ df_cm_melted = df_cm.melt(
     id_vars='index', var_name='Prediccion', value_name='Cantidad'
 )
 
-df_cm_melted.rename(columns={'index': 'Valor_Real'}, inplace=True)
+df_cm_melted = df_cm_melted.rename(columns={'index': 'Valor_Real'})
 
 plt.figure(figsize=(8, 5))
 sns.barplot(
