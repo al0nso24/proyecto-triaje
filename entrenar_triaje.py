@@ -9,9 +9,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 #Carga de datos
-df = pd.read_csv('dataset_triaje.csv')
-X = df.drop('Prioridad_triaje', axis=1)
-y = df['Prioridad_triaje']
+df = pd.read_csv('dataset_triaje_sintetico.csv')
+X = df.drop('prioridad', axis=1)
+y = df['prioridad']
 
 #Partición Train (70%), Validation (15%), Test (15%)
 X_train, X_temp, y_train, y_temp = train_test_split(
@@ -70,7 +70,7 @@ evaluar_modelo(
     y_test
 )
 
-# CORRECCIÓN 1: Usamos X_val_scaled y X_test_scaled para el SVM
+#X_val_scaled y X_test_scaled para el SVM
 y_pred_test = evaluar_modelo(
     "Modelo Principal (SVM)", modelo_svm, X_val_scaled, y_val, X_test_scaled, y_test
 )
@@ -78,7 +78,9 @@ y_pred_test = evaluar_modelo(
 print("\nReporte detallado por clase (SVM - Test):")
 print(
     classification_report(
-        y_test, y_pred_test, target_names=['1-Crítico', '2-Moderado', '3-Leve']
+        y_test,
+        y_pred_test,
+        target_names=['0-Leve', '1-Moderado', '2-Crítico']
     )
 )
 
@@ -88,11 +90,11 @@ cm = confusion_matrix(y_test, y_pred_test)
 #Convirtiendo matriz de confusión a un DataFrame para graficar barras limpias
 df_cm = pd.DataFrame(
     cm,
-    index=['Real: Crítico (1)', 'Real: Moderado (2)', 'Real: Leve (3)'],
+    index=['Real: Leve (0)', 'Real: Moderado (1)', 'Real: Crítico (2)'],
     columns=[
-        'Pred: Crítico (1)',
-        'Pred: Moderado (2)',
-        'Pred: Leve (3)',
+        'Pred: Leve (0)',
+        'Pred: Moderado (1)',
+        'Pred: Crítico (2)',
     ],
 ).reset_index()
 
@@ -130,13 +132,22 @@ print("Modelo serializado guardado como 'modelo_triaje.pkl'")
 
 #Prueba de inferencia rápida en consola
 paciente_nuevo = pd.DataFrame([{
-    'Edad': 68,
-    'Frecuencia_cardiaca': 125,
-    'Presion_sistolica': 170,
-    'Saturacion_oxigeno': 88.5,
-    'Temperatura': 38.2,
-    'Dolor_pecho': 1,
-    'Dificultad_respiratoria': 1,
+    'edad': 68,
+    'temperatura': 38.2,
+    'frec_cardiaca': 125,
+    'frec_respiratoria': 24,
+    'saturacion_o2': 88.5,
+    'presion_sistolica': 170,
+    'dificultad_respiratoria': 1,
+    'dolor_toracico': 1,
+    'sangrado': 0,
+    'perdida_conciencia': 0,
+    'fiebre_persistente': 1,
+    'vomitos': 0,
+    'dolor_abdominal': 0,
+    'dolor de cabeza': 0,
+    'tos': 1,
+    'malestar_general': 1,
 }])
 
 #Escalando también los datos del paciente nuevo antes de predecir con SVM
@@ -144,9 +155,9 @@ paciente_nuevo_scaled = scaler.transform(paciente_nuevo)
 prediccion = modelo_svm.predict(paciente_nuevo_scaled)[0]
 
 niveles = {
-    1: 'Prioridad 1 - Crítico (Atención Inmediata)',
-    2: 'Prioridad 2 - Moderado',
-    3: 'Prioridad 3 - Leve',
+    0: 'Prioridad 0 - Leve',
+    1: 'Prioridad 1 - Moderado',
+    2: 'Prioridad 2 - Crítico (Atención Inmediata)',
 }
 
 print(f'\nPrueba con paciente nuevo -> Resultado: {niveles[prediccion]}')
