@@ -5,12 +5,12 @@ Modelo de aprendizaje automático desarrollado para clasificar y priorizar pacie
 ---
 
 ## 📋 Descripción del Proyecto
-Este repositorio contiene el pipeline completo de generación de datos sintéticos, entrenamiento, validación y serialización de un modelo de clasificación multiclase para triaje médico. 
+Este repositorio contiene el pipeline completo de generación de datos sintéticos, preprocesamiento, entrenamiento, validación y serialización de un modelo de clasificación multiclase para triaje médico. 
 
 El sistema clasifica a cada paciente en tres niveles de atención:
-* 🔴 **Prioridad 1 — Crítico:** Atención médica inmediata.
-* 🟡 **Prioridad 2 — Moderado:** Atención urgente con observación.
-* 🟢 **Prioridad 3 — Leve:** Consulta médica estándar (no urgente).
+- 🔴 **Prioridad 1 — Crítico:** Atención médica inmediata.
+- 🟡 **Prioridad 2 — Moderado:** Atención urgente con observación.
+- 🟢 **Prioridad 3 — Leve:** Consulta médica estándar (no urgente).
 
 ---
 
@@ -21,7 +21,7 @@ proyecto-triaje/
 ├── generar_dataset.py     # Script de generación de datos sintéticos con lógica clínica
 ├── dataset_triaje.csv     # Dataset generado (2,500 registros clínicos)
 ├── entrenar_triaje.py     # Pipeline de entrenamiento, validación, métricas y exportación
-├── modelo_triaje.pkl      # Modelo Random Forest serializado listo para inferencia
+├── modelo_triaje.pkl      # Modelo SVM serializado listo para inferencia
 ├── matriz_confusion.png   # Gráfico de evaluación por clases (generado automáticamente)
 └── README.md              # Documentación del proyecto
 ```
@@ -29,11 +29,11 @@ proyecto-triaje/
 ---
 
 ## 🛠️ Tecnologías y Librerías
-* **Lenguaje:** Python 3.x
-* **Manipulación de datos:** `pandas`, `numpy`
-* **Machine Learning:** `scikit-learn` (`RandomForestClassifier`, `LogisticRegression`, `StandardScaler`)
-* **Visualización:** `matplotlib`, `seaborn`
-* **Serialización:** `joblib`
+- **Lenguaje:** Python 3.x
+- **Manipulación de datos:** `pandas`, `numpy`
+- **Machine Learning:** `scikit-learn` (`SVC`, `LogisticRegression`, `StandardScaler`)
+- **Visualización:** `matplotlib`, `seaborn`
+- **Serialización:** `joblib`
 
 ---
 
@@ -56,15 +56,15 @@ proyecto-triaje/
    ```bash
    python entrenar_triaje.py
    ```
-   *(Entrena el baseline y el modelo principal, imprime las métricas en consola, guarda `matriz_confusion.png` y exporta `modelo_triaje.pkl`).*
+   *(Entrena el baseline y el modelo principal con escalamiento, imprime las métricas en consola, guarda `matriz_confusion.png` y exporta `modelo_triaje.pkl`).*
 
 ---
 
 ## 📊 Resultados Experimentales (Conjunto de Prueba)
 
-Se utilizó una partición estratificada de **70% Train / 15% Validation / 15% Test** con semilla fija (`random_state=42`):
+Se utilizó una partición estratificada de **70% Train / 15% Validation / 15% Test** con semilla fija (`random_state=42`) y estandarización de variables (`StandardScaler`):
 
 | Modelo | Accuracy | Precision | Recall | F1-Score |
 | :--- | :---: | :---: | :---: | :---: |
 | **Baseline (Regresión Logística)** | 79.47% | 0.7909 | 0.7947 | 0.7886 |
-| **Modelo Principal (Random Forest)** | **81.60%** | **0.8269** | **0.8160** | **0.8192** |
+| **Modelo Principal (SVM)** | **83.20%** | **0.8369** | **0.8320** | **0.8315** |
