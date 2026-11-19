@@ -1,0 +1,86 @@
+{
+  "features": [
+    "edad",
+    "temperatura",
+    "frec_cardiaca",
+    "frec_respiratoria",
+    "saturacion_o2",
+    "presion_sistolica",
+    "dificultad_respiratoria",
+    "dolor_toracico",
+    "sangrado",
+    "perdida_conciencia",
+    "fiebre_persistente",
+    "vomitos",
+    "dolor_abdominal",
+    "dolor de cabeza",
+    "tos",
+    "malestar_general"
+  ],
+  "clases": {
+    "0": "Baja",
+    "1": "Media",
+    "2": "Alta"
+  },
+  "particion": "70/15/15 estratificada, semilla 42",
+  "metricas": {
+    "regresion_logistica": {
+      "accuracy_val": 0.7467,
+      "accuracy_test": 0.6311,
+      "f1_ponderado_val": 0.7471,
+      "f1_ponderado_test": 0.6298,
+      "f1_macro_test": 0.6266,
+      "recall_por_clase_test": [
+        0.684,
+        0.65,
+        0.51
+      ],
+      "matriz_confusion_test": [
+        [
+          52,
+          24,
+          0
+        ],
+        [
+          25,
+          65,
+          10
+        ],
+        [
+          4,
+          20,
+          25
+        ]
+      ]
+    },
+    "svm": {
+      "accuracy_val": 0.7333,
+      "accuracy_test": 0.6889,
+      "f1_ponderado_val": 0.7338,
+      "f1_ponderado_test": 0.6888,
+      "f1_macro_test": 0.6902,
+      "recall_por_clase_test": [
+        0.737,
+        0.69,
+        0.612
+      ],
+      "matriz_confusion_test": [
+        [
+          56,
+          19,
+          1
+        ],
+        [
+          24,
+          69,
+          7
+        ],
+        [
+          3,
+          16,
+          30
+        ]
+      ]
+    }
+  }
+}
